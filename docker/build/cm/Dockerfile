@@ -1,0 +1,8 @@
+ARG TOOLS_ASSETS_IMAGE
+ARG CM_IMAGE
+
+FROM ${TOOLS_ASSETS_IMAGE} as tools
+FROM ${CM_IMAGE}
+
+COPY --from=tools /tools /tools
+

@@ -1,0 +1,130 @@
+version: "2.4"
+
+services:
+  traefik:
+    volumes:
+      - ./traefik:C:/etc/traefik
+    depends_on:
+      - cm
+
+  mssql:
+    image: ${COMPOSE_PROJECT_NAME}-mssql-dev:${SITECORE_VERSION}
+    build:
+      context: ./build/mssql
+      args:
+        MSSQL_IMAGE: ${MSSQL_ASSETS_IMAGE}
+        MSSQL_INIT_IMAGE: ${MSSQL_ASSETS_INIT_IMAGE}
+        #HRZ_IMAGE: ${SITECORE_DOCKER_MODULES_REGISTRY}horizon-integration-xp0-assets:2.26.0-1809
+        SITECRON_IMAGE: sitecoremaster/sitecore-sitecron:3.2.0-10.1-1809
+        HEADLESS_IMAGE: ${SITECORE_DOCKER_MODULES_REGISTRY}sitecore-headless-services-xp1-assets:16.0.0-1809
+    volumes:
+      - ${LOCAL_DATA_PATH}\mssql:c:\data
+    mem_limit: ${MEM_LIMIT_SQL:-4GB}
+    restart: always
+
+  solr:
+    volumes:
+      - ${LOCAL_DATA_PATH}\solr:c:\data
+    mem_limit: ${MEM_LIMIT_SOLR:-1GB}
+    restart: always
+
+  #solr-init:
+  #  image: ${SITECORE_DOCKER_REGISTRY}sitecore-xp0-solr-init:${SITECORE_VERSION}
+
+  id:
+    volumes:
+      - ${HOST_LICENSE_FOLDER}:c:\license
+    environment:
+      SITECORE_LICENSE_LOCATION: c:\license\license.xml
+
+  cm-base:
+    image: ${COMPOSE_PROJECT_NAME}-cm-base:${SITECORE_VERSION}
+    build:
+      context: ./build/cm
+      args:
+        CM_IMAGE: ${CM_ASSETS_IMAGE}
+        TOOLS_ASSETS_IMAGE: ${TOOLS_ASSETS_IMAGE}
+        MGMT_ASSETS_IMAGE: ${MGMT_ASSETS_IMAGE}
+        SPS_ASSETS_IMAGE: ${SPS_ASSETS_IMAGE}
+        SPE_ASSETS_IMAGE: ${SPE_ASSETS_IMAGE}
+        SXA_ASSETS_IMAGE: ${SXA_ASSETS_IMAGE}
+        #HRZ_IMAGE: ${HORIZON_ASSETS_IMAGE}
+        HEADLESS_IMAGE: ${HEADLESS_ASSETS_IMAGE}
+        SITECRON_IMAGE: sitecoremaster/sitecore-sitecron:3.2.0-10.1-1809
+        #COVEO_ASSETS_IMAGE: ${COVEO_ASSETS_IMAGE}
+        #COVEO_SXA_ASSETS_IMAGE: ${COVEO_SXA_ASSETS_IMAGE}
+        #LW_ASSETS_IMAGE: ${LW_ASSETS_IMAGE}
+    deploy:
+      replicas: 0
+
+  cm:
+    image: ${COMPOSE_PROJECT_NAME}-cm-dev:${SITECORE_VERSION}
+    build:
+      context: ./build/cm
+      args:
+        CM_IMAGE: ${COMPOSE_PROJECT_NAME}-cm-base:${SITECORE_VERSION}
+        TOOLS_ASSETS_IMAGE: ${TOOLS_ASSETS_IMAGE}
+    volumes:
+      - ${LOCAL_DEPLOY_PATH}\platform:C:\deploy
+      - ${LOCAL_DATA_PATH}\cm\logs:C:\inetpub\wwwroot\App_Data\logs
+      - ${HOST_LICENSE_FOLDER}:c:\license
+    entrypoint: powershell -Command "& C:\tools\entrypoints\iis\Development.ps1"
+    mem_limit: ${MEM_LIMIT_CM:-4GB}
+    restart: always
+    depends_on:
+      - cm-base
+
+  #coveo-init:
+  #  image: ${REGISTRY}coveo-init:5.0.971.3-ltsc2019
+  #  env_file:
+  #    - coveo.env
+  #  environment:
+  #    # FARM_NAME: sitecore-gc
+  #    # COVEO_ORG_ID: hexagondevtqaasi1j
+  #    # COVEO_CONFIG_API_KEY: xx99deaa2c-01fa-4673-8809-d6fb79944970
+  #    # COVEO_SEARCH_API_KEY: xx8dbd0794-a8a5-4ee5-a705-a1bdb7519ef8
+  #    COVEO_SITECORE_PASSWORD: ${SITECORE_ADMIN_PASSWORD}
+  #    COVEO_SITECORE_USERNAME: sitecore\admin
+  #    SITECORE_URL: http://cm
+  #    SITECORE_USERNAME: sitecore\admin
+  #    SITECORE_PASSWORD: ${SITECORE_ADMIN_PASSWORD}
+  #  depends_on:
+  #    cm:
+  #      condition: service_healthy
+
+  sps:
+    environment:
+      SITECORE_LICENSE_LOCATION: C:\license\license.xml
+    volumes:
+      - ${HOST_LICENSE_FOLDER}:C:\license
+
+  #horizon:
+  #  environment:
+  #    SITECORE_LICENSE_LOCATION: C:\license\license.xml
+  #  volumes:
+  #    - ${HOST_LICENSE_FOLDER}:C:\license
+
+  xconnect:
+    environment:
+      SITECORE_LICENSE_LOCATION: C:\license
+    volumes:
+      - ${HOST_LICENSE_FOLDER}:C:\license
+      - ${LOCAL_DATA_PATH}\xconnect\logs:C:\inetpub\wwwroot\App_Data\Logs
+
+  xdbsearchworker:
+    volumes:
+      - ${HOST_LICENSE_FOLDER}:c:\license
+    environment:
+      SITECORE_LICENSE_LOCATION: c:\license\
+
+  xdbautomationworker:
+    volumes:
+      - ${HOST_LICENSE_FOLDER}:c:\license
+    environment:
+      SITECORE_LICENSE_LOCATION: c:\license\
+
+  cortexprocessingworker:
+    volumes:
+      - ${HOST_LICENSE_FOLDER}:c:\license
+    environment:
+      SITECORE_LICENSE_LOCATION: c:\license\

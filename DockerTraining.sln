@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31911.196
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configuration", "{CC5C0E8D-E8A4-42C6-B079-495FC4962CD2}"
+	ProjectSection(SolutionItems) = preProject
+		publishsettingswebsitedebug.targets = publishsettingswebsitedebug.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Foundation", "Foundation", "{91534FD2-72FB-4792-9F10-4676E51AB859}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Feature", "Feature", "{10EEE382-BF06-4F93-9D73-98DCD49D5FDD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Project", "Project", "{59CFBB83-9480-4185-9223-42CBA60D898E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hackathon.Project.Demo", "src\Project\Demo\Website\Hackathon.Project.Demo.csproj", "{72434708-9D95-4FBB-8EC0-84BDDCE87969}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{0F9A8731-965B-4E49-B435-8992B91E8B90}"
+	ProjectSection(SolutionItems) = preProject
+		docker\.env = docker\.env
+		docker\docker-compose.override.yml = docker\docker-compose.override.yml
+		docker\docker-compose.yml = docker\docker-compose.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{72434708-9D95-4FBB-8EC0-84BDDCE87969}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72434708-9D95-4FBB-8EC0-84BDDCE87969}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72434708-9D95-4FBB-8EC0-84BDDCE87969}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72434708-9D95-4FBB-8EC0-84BDDCE87969}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{72434708-9D95-4FBB-8EC0-84BDDCE87969} = {59CFBB83-9480-4185-9223-42CBA60D898E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BF52F91F-158E-4449-A894-C7C5DA4C26AE}
+	EndGlobalSection
+EndGlobal
